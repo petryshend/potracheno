@@ -1,0 +1,3 @@
+AppBundle\Entity\Expense:
+    expense_{1..10}:
+        amount: <numberBetween(0, 100)>
