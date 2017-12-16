@@ -52,6 +52,12 @@ class Expense
         return $this;
     }
 
+    public function setCreatedAt(DateTime $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
