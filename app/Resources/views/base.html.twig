@@ -30,8 +30,8 @@
                             <li><a href="{{ path('expense.new') }}">Potratit'</a></li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
-                            <li><a href=""><span class="label label-primary">Today: {{ today }}</span></a></li>
-                            <li><a href=""><span class="label label-default">Total: {{ total }}</span></a></li>
+                            <li><a href="{{ path('expense.list.today') }}"><span class="label label-primary">Today: {{ today }}</span></a></li>
+                            <li><a href="{{ path('expense.list.all') }}"><span class="label label-default">Total: {{ total }}</span></a></li>
                         </ul>
                     </div><!-- /.navbar-collapse -->
                 </div><!-- /.container-fluid -->
