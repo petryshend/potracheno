@@ -4,6 +4,7 @@
     <table class="table">
         <thead>
             <tr>
+                <th>Id</th>
                 <th>Amount</th>
                 <th>Created At</th>
             </tr>
@@ -11,10 +12,41 @@
         <tbody>
             {% for expense in expenses %}
                 <tr>
+                    <td>{{ expense.id }}</td>
                     <td>{{ expense.amount }}</td>
                     <td>{{ expense.createdAt|date }}</td>
                 </tr>
             {% endfor %}
         </tbody>
     </table>
+
+    <nav aria-label="Page navigation" class="text-center">
+        <ul class="pagination">
+            {% if page == 1 %}
+                <li class="disabled">
+                    <span aria-hidden="true">&laquo;</span>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{{ path('expense.list.all', {'page': page - 1}) }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+            {% for i in range(1, total_pages) %}
+                <li class="{{ i == page ? 'active' : '' }}"><a href="{{ path('expense.list.all', {'page': i}) }}">{{ i }}</a></li>
+            {% endfor %}
+            {% if page == total_pages %}
+                <li class="disabled">
+                    <span aria-hidden="true">&raquo;</span>
+                </li>
+            {% else %}
+                <li>
+                    <a href="{{ path('expense.list.all', {'page': page + 1}) }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
 {% endblock %}

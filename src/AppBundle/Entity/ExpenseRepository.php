@@ -6,6 +6,21 @@ use Doctrine\ORM\EntityRepository;
 
 class ExpenseRepository extends EntityRepository
 {
+    public function findAll(int $limit = null, int $offset = null)
+    {
+        $query = $this->createQueryBuilder('e');
+        if ($offset) {
+            $query->setFirstResult($offset);
+        }
+        if ($limit) {
+            $query->setMaxResults($limit);
+        }
+        return $query
+            ->orderBy('e.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
     /**
      * @return Expense[]
      */
@@ -39,5 +54,13 @@ class ExpenseRepository extends EntityRepository
             ->setParameter('to', (new \DateTime())->format('Y-m-d') . ' 23:59:59')
             ->getQuery()
             ->getSingleScalarResult() ?? 0;
+    }
+
+    public function findTotalExpenseCount(): int
+    {
+        return $this->createQueryBuilder('e')
+            ->select('COUNT(e.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
     }
 }
