@@ -21,7 +21,6 @@ class Pagination
         $this->pageLimit = $pageLimit;
         $this->page = $request->query->getInt('page', 1);
         $this->pathName = $request->get('_route');
-        dump($this->pathName);
         if ($this->page < 1) {
             $this->page = 1;
         } else if ($this->page > $this->getTotalPages()) {

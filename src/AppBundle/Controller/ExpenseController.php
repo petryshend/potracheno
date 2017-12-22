@@ -31,7 +31,8 @@ class ExpenseController extends Controller
     {
         $pagination = new Pagination($request, $this->getExpenseRepo()->findTotalExpenseCount(), self::PER_PAGE_LIMIT);
         $expenses = $this->getExpenseRepo()->findAll($pagination->getPageLimit(), $pagination->getOffset());
-        return $this->renderExpensesView($expenses, [
+        return $this->render(':expense:list.html.twig', [
+            'expenses' => $expenses,
             'pagination' => $pagination,
         ]);
     }
@@ -43,25 +44,16 @@ class ExpenseController extends Controller
      */
     public function listTodayAction(Request $request): Response
     {
-        $expenses = $this->getExpenseRepo()->findAllToday();
-        $pagination = new Pagination($request, count($expenses), self::PER_PAGE_LIMIT);
-        return $this->renderExpensesView($expenses, [
-            'pagination' => $pagination,
-        ]);
-    }
-
-    /**
-     * @param array $expenses
-     * @param array $params
-     * @return Response
-     */
-    private function renderExpensesView(array $expenses, array $params = []): Response
-    {
+        $pagination = new Pagination(
+            $request,
+            $this->getExpenseRepo()->findTotalTodayExpenseCount(),
+            self::PER_PAGE_LIMIT
+        );
+        $expenses = $this->getExpenseRepo()->findAllToday($pagination->getPageLimit(), $pagination->getOffset());
         return $this->render(':expense:list.html.twig', [
             'expenses' => $expenses,
-            'total' => $this->getExpenseRepo()->findTotal(),
-            'today' => $this->getExpenseRepo()->findTotalToday(),
-        ] + $params);
+            'pagination' => $pagination,
+        ]);
     }
 
     /**
