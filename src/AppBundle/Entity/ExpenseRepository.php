@@ -26,7 +26,7 @@ class ExpenseRepository extends EntityRepository
         return $this->createQueryBuilder('e')
             ->select('SUM(e.amount)')
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult() ?? 0;
     }
 
     public function findTotalToday(): float
@@ -38,6 +38,6 @@ class ExpenseRepository extends EntityRepository
             ->setParameter('from', (new \DateTime())->format('Y-m-d') . ' 00:00:00')
             ->setParameter('to', (new \DateTime())->format('Y-m-d') . ' 23:59:59')
             ->getQuery()
-            ->getSingleScalarResult();
+            ->getSingleScalarResult() ?? 0;
     }
 }
