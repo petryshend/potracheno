@@ -29,23 +29,25 @@ class ExpenseController extends Controller
      */
     public function listAllAction(Request $request): Response
     {
-        $page = $request->query->getInt('page', 1);
-        $pagination = new Pagination($this->getExpenseRepo()->findTotalExpenseCount(), self::PER_PAGE_LIMIT, $page);
+        $pagination = new Pagination($request, $this->getExpenseRepo()->findTotalExpenseCount(), self::PER_PAGE_LIMIT);
         $expenses = $this->getExpenseRepo()->findAll($pagination->getPageLimit(), $pagination->getOffset());
-
         return $this->renderExpensesView($expenses, [
-            'page' => $pagination->getPage(),
-            'total_pages' => $pagination->getTotalPages(),
+            'pagination' => $pagination,
         ]);
     }
 
     /**
      * @Route("/expense/list/today", name="expense.list.today")
+     * @param Request $request
+     * @return Response
      */
-    public function listTodayAction(): Response
+    public function listTodayAction(Request $request): Response
     {
         $expenses = $this->getExpenseRepo()->findAllToday();
-        return $this->renderExpensesView($expenses);
+        $pagination = new Pagination($request, count($expenses), self::PER_PAGE_LIMIT);
+        return $this->renderExpensesView($expenses, [
+            'pagination' => $pagination,
+        ]);
     }
 
     /**
