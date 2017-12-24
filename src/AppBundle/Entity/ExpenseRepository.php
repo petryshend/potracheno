@@ -27,6 +27,7 @@ class ExpenseRepository extends EntityRepository
             ->andWhere('e.createdAt < :to')
             ->setParameter('from', (new \DateTime())->format('Y-m-d') . ' 00:00:00')
             ->setParameter('to', (new \DateTime())->format('Y-m-d') . ' 23:59:59')
+            ->orderBy('e.id', 'DESC')
             ->getQuery()
             ->getResult();
     }

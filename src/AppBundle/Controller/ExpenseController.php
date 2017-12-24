@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Expense;
 use AppBundle\Entity\ExpenseRepository;
+use AppBundle\Form\ExpenseFormType;
 use AppBundle\Utils\Pagination;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -58,17 +59,27 @@ class ExpenseController extends Controller
 
     /**
      * @Route("/expense/new", name="expense.new")
+     * @param Request $request
+     * @return Response
      */
-    public function newAction()
+    public function newAction(Request $request)
     {
-        $expense = new Expense();
-        $expense->setAmount(rand(0, 100));
+        $form = $this->createForm(ExpenseFormType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $expense = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($expense);
+            $em->flush();
 
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($expense);
-        $em->flush();
+            $this->addFlash('success', 'Expense created');
 
-        return new Response('<html><body>Expense created</body></html>');
+            return $this->redirectToRoute('expense.list.today');
+        }
+
+        return $this->render(':expense:new.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     private function getExpenseRepo(): ExpenseRepository

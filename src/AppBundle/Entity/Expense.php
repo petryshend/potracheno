@@ -23,7 +23,7 @@ class Expense
      * @ORM\Column(type="float")
      * @var float
      */
-    private $amount;
+    private $amount = 0.0;
 
     /**
      * @ORM\Column(type="datetime", options={"default": 0})
