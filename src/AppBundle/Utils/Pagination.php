@@ -40,6 +40,9 @@ class Pagination
 
     public function getTotalPages(): int
     {
+        if ($this->totalItemsCount === 0) {
+            return 1;
+        }
         return ceil($this->totalItemsCount / $this->pageLimit);
     }
 
