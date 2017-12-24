@@ -15,6 +15,7 @@ class ExpenseFormType extends AbstractType
             ->add('amount', null, [
                 'attr' => [
                     'autofocus' => 'autofocus',
+                    'autocomplete' => 'off',
                 ]
             ])
             ;

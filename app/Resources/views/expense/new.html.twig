@@ -2,7 +2,7 @@
 
 {% block body %}
     {{ form_start(form) }}
-        {{ form_widget(form) }}
+        {{ form_row(form.amount, {'type': 'number'}) }}
         <button type="submit" class="btn btn-primary">Save</button>
     {{ form_end(form) }}
 {% endblock %}
