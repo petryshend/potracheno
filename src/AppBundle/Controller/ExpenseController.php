@@ -20,7 +20,7 @@ class ExpenseController extends Controller
      */
     public function indexAction(): Response
     {
-        return $this->redirectToRoute('expense.list.today');
+        return $this->redirectToRoute('expense.new');
     }
 
     /**

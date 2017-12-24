@@ -25,19 +25,17 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="{{ path('expense.list.today') }}">Potracheno</a>
+                        <span class="navbar-brand">{{ page_title(app.request.get('_route')) }}</span>
                     </div>
 
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                        <ul class="nav navbar-nav">
+                        <ul class="nav navbar-nav navbar-right">
                             <li class="{{ app.request.get('_route') == 'expense.new' ? 'active' : '' }}">
                                 <a href="{{ path('expense.new') }}" class="new-expense-link">
                                     <img src="{{ asset('img/spend_money_small.png') }}" alt="Spend money">
                                 </a>
                             </li>
-                        </ul>
-                        <ul class="nav navbar-nav navbar-right">
                             <li class="{{ app.request.get('_route') == 'expense.list.today' ? 'active' : '' }}">
                                 <a href="{{ path('expense.list.today') }}">
                                     <span class="label label-primary">Today: {{ today_total_expense() }}</span>

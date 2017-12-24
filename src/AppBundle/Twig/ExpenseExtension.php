@@ -8,6 +8,12 @@ use Doctrine\ORM\EntityManager;
 
 class ExpenseExtension extends \Twig_Extension
 {
+    const PAGE_TITLE_MAP = [
+        'expense.new' => 'Create new expense',
+        'expense.list.all' => 'All expenses',
+        'expense.list.today' => 'Today expenses',
+    ];
+
     /** @var ExpenseRepository */
     private $expenseRepository;
 
@@ -26,6 +32,10 @@ class ExpenseExtension extends \Twig_Extension
             new \Twig_SimpleFunction(
                 'today_total_expense',
                 [$this, 'todayTotalExpense']
+            ),
+            new \Twig_SimpleFunction(
+                'page_title',
+                [$this, 'getPageTitleForRoute']
             )
         ];
     }
@@ -38,5 +48,10 @@ class ExpenseExtension extends \Twig_Extension
     public function todayTotalExpense(): float
     {
         return $this->expenseRepository->findTotalToday();
+    }
+
+    public function getPageTitleForRoute(string $routeName): string
+    {
+        return self::PAGE_TITLE_MAP[$routeName] ?? 'Potracheno';
     }
 }
