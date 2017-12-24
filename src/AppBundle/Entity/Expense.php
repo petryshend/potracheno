@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="ExpenseRepository")
@@ -20,6 +21,7 @@ class Expense
     private $id;
 
     /**
+     * @Assert\GreaterThan(0)
      * @ORM\Column(type="float")
      * @var float
      */
