@@ -35,4 +35,7 @@ services:
     #         $someArgument: 'some_value'
 
     AppBundle\DataFixtures\ORM\LoadFixtures:
-        tags: [doctrine.fixture.orm]
+        tags: ['doctrine.fixture.orm']
+
+    AppBundle\Doctrine\HashPasswordListener:
+        tags: ['doctrine.event_subscriber']

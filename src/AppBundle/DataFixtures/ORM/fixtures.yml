@@ -2,3 +2,8 @@ AppBundle\Entity\Expense:
     expense_{1..10}:
         amount: <numberBetween(0, 100)>
         createdAt: <dateTimeBetween('-6 months', 'now')>
+
+AppBundle\Entity\User:
+    user_{1..10}:
+        email: petryshend+<current()>\@gmail.com
+        plainPassword: 123
