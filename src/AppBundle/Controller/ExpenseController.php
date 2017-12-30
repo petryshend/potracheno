@@ -7,30 +7,31 @@ use AppBundle\Entity\ExpenseRepository;
 use AppBundle\Form\ExpenseFormType;
 use AppBundle\Utils\Pagination;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @Route("/expense")
+ * @Security("is_granted('ROLE_USER')")
+ */
 class ExpenseController extends Controller
 {
     const PER_PAGE_LIMIT = 5;
 
     /**
-     * @Route("/", name="home")
-     */
-    public function indexAction(): Response
-    {
-        return $this->redirectToRoute('expense.new');
-    }
-
-    /**
-     * @Route("/expense/list/all", name="expense.list.all")
+     * @Route("/list/all", name="expense.list.all")
      * @param Request $request
      * @return Response
      */
     public function listAllAction(Request $request): Response
     {
-        $pagination = new Pagination($request, $this->getExpenseRepo()->findTotalExpenseCount(), self::PER_PAGE_LIMIT);
+        $pagination = new Pagination(
+            $request,
+            $this->getExpenseRepo()->findTotalExpenseCount(),
+            self::PER_PAGE_LIMIT
+        );
         $expenses = $this->getExpenseRepo()->findAll($pagination->getPageLimit(), $pagination->getOffset());
         return $this->render(':expense:list.html.twig', [
             'expenses' => $expenses,
@@ -39,7 +40,7 @@ class ExpenseController extends Controller
     }
 
     /**
-     * @Route("/expense/list/today", name="expense.list.today")
+     * @Route("/list/today", name="expense.list.today")
      * @param Request $request
      * @return Response
      */
@@ -58,7 +59,7 @@ class ExpenseController extends Controller
     }
 
     /**
-     * @Route("/expense/new", name="expense.new")
+     * @Route("/new", name="expense.new")
      * @param Request $request
      * @return Response
      */
