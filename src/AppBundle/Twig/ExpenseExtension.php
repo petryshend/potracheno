@@ -12,6 +12,8 @@ class ExpenseExtension extends \Twig_Extension
         'expense.new' => 'Create new expense',
         'expense.list.all' => 'All expenses',
         'expense.list.today' => 'Today expenses',
+        'security_login' => 'Login',
+        'security_register' => 'Register',
     ];
 
     /** @var ExpenseRepository */
