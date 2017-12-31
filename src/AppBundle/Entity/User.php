@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -38,6 +39,22 @@ class User implements UserInterface
      * @Assert\NotBlank(groups={"Registration"})
      */
     private $plainPassword;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Expense", mappedBy="user")
+     * @var ArrayCollection|Expense[]
+     */
+    private $expenses;
+
+    public function __construct()
+    {
+        $this->expenses = new ArrayCollection();
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
 
     /**
      * @return mixed
@@ -139,5 +156,13 @@ class User implements UserInterface
     {
         $this->password = $password;
         return $this;
+    }
+
+    /**
+     * @return ArrayCollection|Expense[]
+     */
+    public function getExpenses(): ArrayCollection
+    {
+        return $this->expenses;
     }
 }

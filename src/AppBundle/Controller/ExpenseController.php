@@ -27,12 +27,17 @@ class ExpenseController extends Controller
      */
     public function listAllAction(Request $request): Response
     {
+        $user = $this->getUser();
         $pagination = new Pagination(
             $request,
-            $this->getExpenseRepo()->findTotalExpenseCount(),
+            $this->getExpenseRepo()->findTotalExpenseCountByUser($user),
             self::PER_PAGE_LIMIT
         );
-        $expenses = $this->getExpenseRepo()->findAll($pagination->getPageLimit(), $pagination->getOffset());
+        $expenses = $this->getExpenseRepo()->findAllByUser(
+            $user,
+            $pagination->getPageLimit(),
+            $pagination->getOffset()
+        );
         return $this->render(':expense:list.html.twig', [
             'expenses' => $expenses,
             'pagination' => $pagination,
@@ -46,12 +51,17 @@ class ExpenseController extends Controller
      */
     public function listTodayAction(Request $request): Response
     {
+        $user = $this->getUser();
         $pagination = new Pagination(
             $request,
-            $this->getExpenseRepo()->findTotalTodayExpenseCount(),
+            $this->getExpenseRepo()->findTotalTodayExpenseCountByUser($user),
             self::PER_PAGE_LIMIT
         );
-        $expenses = $this->getExpenseRepo()->findAllToday($pagination->getPageLimit(), $pagination->getOffset());
+        $expenses = $this->getExpenseRepo()->findAllTodayByUser(
+            $user,
+            $pagination->getPageLimit(),
+            $pagination->getOffset()
+        );
         return $this->render(':expense:list.html.twig', [
             'expenses' => $expenses,
             'pagination' => $pagination,
@@ -68,7 +78,9 @@ class ExpenseController extends Controller
         $form = $this->createForm(ExpenseFormType::class);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Expense $expense */
             $expense = $form->getData();
+            $expense->setUser($this->getUser());
             $em = $this->getDoctrine()->getManager();
             $em->persist($expense);
             $em->flush();

@@ -28,6 +28,13 @@ class Expense
     private $amount = 0.0;
 
     /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="expenses")
+     * @ORM\JoinColumn(nullable=false)
+     * @var User
+     */
+    private $user;
+
+    /**
      * @ORM\Column(type="datetime", options={"default": 0})
      * @var DateTime
      */
@@ -63,5 +70,16 @@ class Expense
     public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
+    }
+
+    public function getUser(): User
+    {
+        return $this->user;
+    }
+
+    public function setUser(User $user): self
+    {
+        $this->user = $user;
+        return $this;
     }
 }

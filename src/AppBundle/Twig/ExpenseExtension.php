@@ -5,6 +5,7 @@ namespace AppBundle\Twig;
 use AppBundle\Entity\Expense;
 use AppBundle\Entity\ExpenseRepository;
 use Doctrine\ORM\EntityManager;
+use AppBundle\Entity\User;
 
 class ExpenseExtension extends \Twig_Extension
 {
@@ -42,14 +43,14 @@ class ExpenseExtension extends \Twig_Extension
         ];
     }
 
-    public function totalExpense(): float
+    public function totalExpense(User $user): float
     {
-        return $this->expenseRepository->findTotal();
+        return $this->expenseRepository->findTotalByUser($user);
     }
 
-    public function todayTotalExpense(): float
+    public function todayTotalExpense(User $user): float
     {
-        return $this->expenseRepository->findTotalToday();
+        return $this->expenseRepository->findTotalTodayByUser($user);
     }
 
     public function getPageTitleForRoute(string $routeName): string

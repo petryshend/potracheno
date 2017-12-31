@@ -7,24 +7,29 @@ use Doctrine\ORM\QueryBuilder;
 
 class ExpenseRepository extends EntityRepository
 {
-    public function findAll(int $limit = null, int $offset = null)
+    public function findAllByUser(User $user, int $limit = null, int $offset = null)
     {
         return $this->createLimitedQueryBuilder($limit, $offset)
+            ->where('e.user = :user')
             ->orderBy('e.id', 'DESC')
+            ->setParameter('user', $user)
             ->getQuery()
             ->getResult();
     }
 
     /**
+     * @param User $user
      * @param int|null $limit
      * @param int|null $offset
      * @return array
      */
-    public function findAllToday(int $limit = null, int $offset = null): array
+    public function findAllTodayByUser(User $user, int $limit = null, int $offset = null): array
     {
         return $this->createLimitedQueryBuilder($limit, $offset)
             ->where('e.createdAt > :from')
             ->andWhere('e.createdAt < :to')
+            ->andWhere('e.user = :user')
+            ->setParameter('user', $user)
             ->setParameter('from', (new \DateTime())->format('Y-m-d') . ' 00:00:00')
             ->setParameter('to', (new \DateTime())->format('Y-m-d') . ' 23:59:59')
             ->orderBy('e.id', 'DESC')
@@ -32,40 +37,48 @@ class ExpenseRepository extends EntityRepository
             ->getResult();
     }
 
-    public function findTotal(): float
+    public function findTotalByUser(User $user): float
     {
         return $this->createQueryBuilder('e')
             ->select('SUM(e.amount)')
+            ->where('e.user = :user')
+            ->setParameter('user', $user)
             ->getQuery()
             ->getSingleScalarResult() ?? 0;
     }
 
-    public function findTotalToday(): float
+    public function findTotalTodayByUser(User $user): float
     {
         return $this->createQueryBuilder('e')
             ->select('SUM(e.amount)')
             ->where('e.createdAt > :from')
             ->andWhere('e.createdAt < :to')
+            ->andWhere('e.user = :user')
+            ->setParameter('user', $user)
             ->setParameter('from', (new \DateTime())->format('Y-m-d') . ' 00:00:00')
             ->setParameter('to', (new \DateTime())->format('Y-m-d') . ' 23:59:59')
             ->getQuery()
             ->getSingleScalarResult() ?? 0;
     }
 
-    public function findTotalExpenseCount(): int
+    public function findTotalExpenseCountByUser(User $user): int
     {
         return $this->createQueryBuilder('e')
             ->select('COUNT(e.id)')
+            ->where('e.user = :user')
+            ->setParameter('user', $user)
             ->getQuery()
             ->getSingleScalarResult();
     }
 
-    public function findTotalTodayExpenseCount(): int
+    public function findTotalTodayExpenseCountByUser(User $user): int
     {
         return $this->createQueryBuilder('e')
             ->select('COUNT(e.id)')
             ->where('e.createdAt > :from')
             ->andWhere('e.createdAt < :to')
+            ->andWhere('e.user = :user')
+            ->setParameter('user', $user)
             ->setParameter('from', (new \DateTime())->format('Y-m-d') . ' 00:00:00')
             ->setParameter('to', (new \DateTime())->format('Y-m-d') . ' 23:59:59')
             ->getQuery()
